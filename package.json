@@ -1,8 +1,10 @@
 {
   "name": "lmfaole-party",
   "private": true,
+  "type": "module",
   "scripts": {
     "build": "tsc -p src/client/tsconfig.json",
+    "test": "node --experimental-strip-types --test src/worker/utils.test.ts src/client/format-date.test.ts",
     "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p src/client/tsconfig.json --noEmit",
     "deploy": "npm run build && wrangler deploy"
   },

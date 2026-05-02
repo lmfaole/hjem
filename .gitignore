@@ -4,5 +4,6 @@ node_modules/
 
 # Compiled client scripts — source lives in src/client/
 public/cv.js
+public/format-date.js
 public/index.js
 public/site-header.js

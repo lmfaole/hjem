@@ -1,4 +1,5 @@
 import { generateOgImage } from './og-image.js';
+import { parseTotalFromLink } from './utils.js';
 
 const GITHUB_COMMITS = 'https://api.github.com/repos/fremtind/jokul/commits?author=lmfaole';
 const CACHE_TTL = 600;
@@ -65,15 +66,6 @@ async function handleCommits(context: ExecutionContext): Promise<Response> {
 
   context.waitUntil(cache.put(cacheKey, response.clone()));
   return response;
-}
-
-// GitHub paginates via an RFC 5988 Link header, e.g.:
-// <...?page=2>; rel="next", <...?page=42>; rel="last"
-// Extracting the "last" page number gives us the total commit count.
-function parseTotalFromLink(linkHeader: string | null): number | null {
-  if (!linkHeader) return null;
-  const match = linkHeader.match(/<[^>]*[?&]page=(\d+)[^>]*>;\s*rel="last"/);
-  return match ? Number(match[1]) : null;
 }
 
 async function handleOgImage(url: URL, context: ExecutionContext): Promise<Response> {

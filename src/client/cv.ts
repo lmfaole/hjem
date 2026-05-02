@@ -70,20 +70,14 @@ interface CV {
   volunteer?: VolunteerRole[];
 }
 
+import { formatDate } from './format-date.js';
+
 fetch('/cv.json')
   .then(response => response.ok ? response.json() as Promise<CV> : Promise.reject(response.status))
   .then(cv => render(cv))
   .catch(() => {
     document.getElementById('cv')!.innerHTML = '<p>Klarte ikke å hente CV-data.</p>';
   });
-
-function formatDate(dateString: string | undefined): string {
-  if (!dateString) return 'nåtid';
-  const [year, month] = dateString.split('-');
-  if (!month) return year;
-  const date = new Date(Number(year), Number(month) - 1);
-  return date.toLocaleDateString('no-NO', { month: 'long', year: 'numeric' });
-}
 
 function render(cv: CV): void {
   const { basics, work, education, certificates, skills, languages, volunteer } = cv;
