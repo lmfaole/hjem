@@ -1,0 +1,16 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "lmfaole-party",
+  "compatibility_date": "2026-04-20",
+  "account_id": "5d49b98b68b70cbd1c81be0f18501262",
+  "main": "./src/worker.js",
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application"
+  },
+  "routes": [
+    { "pattern": "lmfaole.party", "custom_domain": true },
+    { "pattern": "www.lmfaole.party", "custom_domain": true }
+  ]
+}

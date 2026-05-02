@@ -1,0 +1,135 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jsonresume/resume-schema/v1.0.0/schema.json",
+  "basics": {
+    "name": "Ole Jørgen Bakken",
+    "label": "Webutvikler og designsystem-nørd",
+    "pronouns": "he/him",
+    "url": "https://lmfaole.party",
+    "location": {
+      "city": "Oslo",
+      "countryCode": "NO"
+    },
+    "profiles": [
+      {
+        "network": "LinkedIn",
+        "username": "olejorgenbakken",
+        "url": "https://www.linkedin.com/in/olejorgenbakken/"
+      },
+      {
+        "network": "GitHub",
+        "username": "lmfaole",
+        "url": "https://github.com/lmfaole"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "Fremtind",
+      "position": "Frontend-utvikler",
+      "url": "https://www.fremtind.no",
+      "startDate": "2024-05",
+      "summary": "Utvikling av komponenter og dokumentasjon av dem, med mål om å bygge sammenhengende og tilgjengelige tjenester for forsikringskunder. Designsystemet består av komponenter designet i Figma og utviklet i React, og en portal med dokumentasjon bygd med Sanity og Next.js.",
+      "highlights": [
+        { "text": "Jøkul designsystem", "url": "https://jokul.fremtind.no" }
+      ],
+      "location": "Oslo, Norge"
+    },
+    {
+      "name": "Fremtind",
+      "position": "Interaksjonsdesigner",
+      "url": "https://www.fremtind.no",
+      "startDate": "2023-04",
+      "endDate": "2024-04",
+      "location": "Oslo, Norge"
+    },
+    {
+      "name": "NAV",
+      "position": "Produktdesigner",
+      "url": "https://www.nav.no",
+      "startDate": "2021-11",
+      "endDate": "2023-03",
+      "summary": "Design av komponenter i Figma, samt dokumentasjon av dem i en tilhørende portal laget med Sanity. Artikler knyttet til god praksis ved utforming og utvikling av digitale skjema.",
+      "highlights": [
+        { "text": "Aksel designsystem", "url": "https://aksel.nav.no" }
+      ],
+      "location": "Oslo, Norge"
+    },
+    {
+      "name": "Vipps",
+      "position": "Interaksjonsdesigner",
+      "url": "https://www.vipps.no",
+      "startDate": "2021-06",
+      "endDate": "2021-08",
+      "location": "Oslo, Norge"
+    },
+    {
+      "name": "Shortcut",
+      "position": "Interaksjonsdesigner",
+      "startDate": "2021-01",
+      "endDate": "2021-06",
+      "location": "Oslo, Norge"
+    },
+    {
+      "name": "Høyskolen Kristiania",
+      "position": "Lærerassistent",
+      "url": "https://www.kristiania.no",
+      "startDate": "2019-08",
+      "endDate": "2021-06",
+      "location": "Oslo, Norge"
+    }
+  ],
+  "education": [
+    {
+      "institution": "Kristiania",
+      "url": "https://www.kristiania.no",
+      "area": "Information Technology",
+      "areaLang": "en",
+      "studyType": "Bachelor",
+      "startDate": "2018-08",
+      "endDate": "2021-06",
+      "courses": ["Web Development", "Interaksjonsdesign"]
+    },
+    {
+      "institution": "Høgskulen i Volda",
+      "url": "https://www.hivolda.no",
+      "area": "Communication and Media Studies",
+      "areaLang": "en",
+      "studyType": "Årsenhet",
+      "startDate": "2016-08",
+      "endDate": "2017-06",
+      "courses": ["Video Production", "Video Editing"]
+    }
+  ],
+  "certificates": [
+    {
+      "name": "Fast Track to Accessibility for Web Developers, Core Techniques Exam",
+      "nameLang": "en",
+      "issuer": "Deque Systems, Inc",
+      "date": "2025-01"
+    }
+  ],
+  "skills": [
+    { "name": "Frontend-utvikling", "keywords": ["HTML", "CSS", "JavaScript", "React"] },
+    { "name": "Designsystemer", "keywords": ["Figma", "Tokens", "Komponenter", "Dokumentasjon"] },
+    { "name": "Tilgjengelighet", "keywords": ["WCAG", "ARIA", "Semantisk HTML"] },
+    { "name": "CMS / Plattform", "keywords": ["Sanity", "Next.js", "Cloudflare Workers"] }
+  ],
+  "languages": [
+    { "language": "Norsk", "fluency": "Morsmål" },
+    { "language": "Engelsk", "fluency": "Morsmål eller tospråklig kompetanse" }
+  ],
+  "volunteer": [
+    {
+      "organization": "Slottsfjellfestivalen",
+      "position": "Bartender",
+      "startDate": "2017-07",
+      "endDate": "2017-07"
+    },
+    {
+      "organization": "X2 Festivalen",
+      "position": "Bartender",
+      "startDate": "2017-03",
+      "endDate": "2017-03"
+    }
+  ]
+}
