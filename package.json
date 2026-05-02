@@ -1,0 +1,17 @@
+{
+  "name": "lmfaole-party",
+  "private": true,
+  "scripts": {
+    "build": "tsc -p src/client/tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p src/client/tsconfig.json --noEmit",
+    "deploy": "npm run build && wrangler deploy"
+  },
+  "dependencies": {
+    "@resvg/resvg-wasm": "^2.6.2",
+    "satori": "^0.12.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20260425.1",
+    "typescript": "^6.0.3"
+  }
+}

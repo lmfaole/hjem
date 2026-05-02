@@ -2,10 +2,11 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "lmfaole-party",
   "compatibility_date": "2026-04-20",
-  "main": "./src/worker.js",
+  "main": "./src/worker/index.ts",
   "assets": {
     "directory": "./public",
     "binding": "ASSETS",
+    // Serves index.html for unknown paths so /cv resolves to cv.html via asset routing
     "not_found_handling": "single-page-application"
   },
   "routes": [
