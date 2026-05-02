@@ -1,0 +1,21 @@
+[popover] {
+  background: Canvas;
+  color: CanvasText;
+  padding: 1em 1.5em;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+[popover] ul {
+  list-style: none;
+  padding: 0;
+}
+
+code {
+  font: 0.9em/var(--line-height) monospace;
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  padding: 0.2ex 0.4ch;
+  border-radius: 4px;
+  overflow: hidden;
+}

@@ -1,0 +1,17 @@
+site-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding-block: 1lh;
+  border-block-end: 1px solid var(--border);
+  margin-block-end: 2lh;
+}
+
+site-header nav {
+  display: flex;
+  gap: 1ch;
+}
+
+section    { margin-block-start: 3lh; }
+article    { margin-block-start: 2lh; }
+article h3 { margin-block-end: 0.25lh; }

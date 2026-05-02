@@ -1,0 +1,13 @@
+fieldset {
+  margin-block-start: 1lh;
+}
+
+label:has(input:is([type="checkbox"], [type="radio"])) {
+  display: block flex;
+  align-items: center;
+  gap: 0.5ch;
+  min-height: 44px;
+  min-width: 44px;
+  max-width: max-content;
+  cursor: pointer;
+}

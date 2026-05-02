@@ -1,0 +1,12 @@
+button, [popover], footer, site-header { display: none; }
+
+body    { max-width: none; padding: 0; }
+section { margin-block-start: 1.5lh; }
+article { margin-block-start: 1lh; break-inside: avoid; }
+p, li   { max-width: none; }
+
+h1 { font-size: 1.6em; }
+h2 { font-size: 1.1em; border-block-end: 1px solid var(--border-strong); padding-block-end: 0.2lh; }
+h3 { font-size: 1em; }
+
+a  { color: inherit; text-decoration: none; padding: 0; margin: 0; }
