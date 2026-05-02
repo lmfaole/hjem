@@ -4,8 +4,8 @@ import yogaWasm from 'yoga-wasm-web/dist/yoga.wasm';
 import { initWasm as initResvg, Resvg } from '@resvg/resvg-wasm';
 import resvgWasm from '@resvg/resvg-wasm/index_bg.wasm';
 
-const FONT_REGULAR = 'https://cdn.jsdelivr.net/npm/@fontsource/inter@5.1.1/files/inter-latin-400-normal.woff2';
-const FONT_BOLD = 'https://cdn.jsdelivr.net/npm/@fontsource/inter@5.1.1/files/inter-latin-700-normal.woff2';
+const FONT_REGULAR = 'https://cdn.jsdelivr.net/npm/geist@1.3.0/dist/fonts/geist-sans/Geist-Regular.ttf';
+const FONT_BOLD = 'https://cdn.jsdelivr.net/npm/geist@1.3.0/dist/fonts/geist-sans/Geist-Bold.ttf';
 const IMAGE_WIDTH = 1200;
 const IMAGE_HEIGHT = 630;
 
@@ -22,9 +22,8 @@ let wasmReady = false;
 
 async function ensureWasm(): Promise<void> {
   if (wasmReady) return;
-  const yoga = await initYoga(yogaWasm);
+  const [yoga] = await Promise.all([initYoga(yogaWasm), initResvg(resvgWasm)]);
   initSatori(yoga);
-  await initResvg(resvgWasm);
   wasmReady = true;
 }
 
@@ -33,8 +32,8 @@ async function loadFont(url: string, cfCache: Cache): Promise<ArrayBuffer> {
   const cached = await cfCache.match(cacheKey);
   if (cached) return cached.arrayBuffer();
   const response = await fetch(url);
-  cfCache.put(cacheKey, response.clone());
-  return response.arrayBuffer();
+  const [buffer] = await Promise.all([response.clone().arrayBuffer(), cfCache.put(cacheKey, response)]);
+  return buffer;
 }
 
 // Minimal element builder — satori accepts React-element-shaped objects: { type, props: { style, children } }
@@ -110,7 +109,7 @@ function buildElement(variant: string): OgElement {
     width: '100%',
     height: '100%',
     backgroundColor: '#111',
-    fontFamily: 'Inter',
+    fontFamily: 'Geist',
   }, [accentBar, body]);
 }
 
@@ -126,8 +125,8 @@ export async function generateOgImage(variant: string, cfCache: Cache): Promise<
     width: IMAGE_WIDTH,
     height: IMAGE_HEIGHT,
     fonts: [
-      { name: 'Inter', data: regularFont, weight: 400, style: 'normal' },
-      { name: 'Inter', data: boldFont, weight: 700, style: 'normal' },
+      { name: 'Geist', data: regularFont, weight: 400, style: 'normal' },
+      { name: 'Geist', data: boldFont, weight: 700, style: 'normal' },
     ],
   });
 
