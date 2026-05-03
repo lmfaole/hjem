@@ -11,25 +11,3 @@ label:has(input:is([type="checkbox"], [type="radio"])) {
   max-width: max-content;
   cursor: pointer;
 }
-
-input[type="number"] {
-  font: inherit;
-  color: inherit;
-  background-color: var(--surface);
-  border: 1px solid var(--border-strong);
-  border-radius: 4px;
-  padding: 0.2ex 0.5ch;
-  min-height: 44px;
-  text-align: end;
-  font-variant-numeric: tabular-nums;
-  inline-size: 100%;
-  max-inline-size: 14ch;
-}
-
-label:has(> input[type="number"]) {
-  display: block flex;
-  flex-direction: column;
-  gap: 0.25lh;
-  margin-block-start: 1lh;
-  max-inline-size: 30ch;
-}

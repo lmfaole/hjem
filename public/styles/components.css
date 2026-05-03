@@ -19,29 +19,3 @@ code {
   border-radius: 4px;
   overflow: hidden;
 }
-
-.budsjett-bar {
-  display: flex;
-  block-size: 1.5lh;
-  margin-block: 1lh 0.5lh;
-  border: 1px solid var(--border-strong);
-  border-radius: 4px;
-  overflow: hidden;
-  background-color: var(--surface);
-}
-
-.budsjett-bar > span {
-  display: block;
-  block-size: 100%;
-}
-
-.budsjett-bar-faste    { background-color: color-mix(in srgb, Highlight 65%, Canvas); }
-.budsjett-bar-variable { background-color: color-mix(in srgb, Highlight 40%, Canvas); }
-.budsjett-bar-sparing  { background-color: color-mix(in srgb, Highlight 80%, Canvas); }
-.budsjett-bar-rest     { background-color: var(--surface); }
-
-.budsjett-mal {
-  font-size: 0.9em;
-  opacity: 0.75;
-  margin-block-start: 0;
-}
