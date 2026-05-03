@@ -1,0 +1,12 @@
+body {
+  max-width: 800px;
+  margin: 0 auto;
+  padding-inline: 1em;
+  background: Canvas;
+  color: CanvasText;
+  font-family: var(--font-family);
+  line-height: var(--line-height);
+}
+
+p, li { max-width: 60ch; }
+li    { margin-block-end: 0.5em; }

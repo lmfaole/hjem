@@ -1,0 +1,20 @@
+{
+  "name": "budsjett-app",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p src/client/tsconfig.json",
+    "test": "node --experimental-strip-types --test src/worker/budsjett.test.ts src/client/summary.test.ts src/client/abonnement-utils.test.ts",
+    "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p src/client/tsconfig.json --noEmit",
+    "deploy": "npm run build && npx wrangler@latest deploy",
+    "db:create": "npx wrangler@latest d1 create budsjett",
+    "db:migrate": "npx wrangler@latest d1 migrations apply budsjett --remote",
+    "db:migrate:local": "npx wrangler@latest d1 migrations apply budsjett --local",
+    "db:seed": "npx wrangler@latest d1 execute budsjett --remote --file=migrations/0002_seed.sql",
+    "db:seed:local": "npx wrangler@latest d1 execute budsjett --local --file=migrations/0002_seed.sql"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20260425.1",
+    "typescript": "^6.0.3"
+  }
+}

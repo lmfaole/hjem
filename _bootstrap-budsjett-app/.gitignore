@@ -1,0 +1,10 @@
+.wrangler/
+.idea/
+node_modules/
+.env
+.env.local
+
+# Compiled client scripts — source lives in src/client/
+public/index.js
+public/summary.js
+public/abonnement-utils.js

@@ -1,0 +1,21 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "budsjett-app",
+  "compatibility_date": "2026-04-20",
+  "main": "./src/worker/index.ts",
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS"
+  },
+  "routes": [
+    { "pattern": "budsjett.lmfaole.party", "custom_domain": true }
+  ],
+  "d1_databases": [
+    {
+      "binding": "BUDSJETT_DB",
+      "database_name": "budsjett",
+      "database_id": "25aed0d4-fd48-4014-8d7a-4d85294d6bcf",
+      "migrations_dir": "migrations"
+    }
+  ]
+}

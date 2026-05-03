@@ -1,0 +1,35 @@
+:focus-visible {
+  outline: 3px solid CanvasText;
+  outline-offset: 3px;
+}
+
+:is(a, button, summary):not(:disabled):not(:focus-visible) {
+  transition: background-color 50ms ease-out;
+
+  &:hover {
+    background-color: var(--hover);
+  }
+}
+
+a {
+  padding-inline: 0.2em;
+  margin-inline: -0.2em;
+}
+
+button {
+  color: inherit;
+  background-color: var(--surface);
+  border-color: var(--border-strong);
+  padding: 0.2ex 0.7em;
+  min-width: 44px;
+  min-height: 44px;
+  margin-block: 2em;
+  font: inherit;
+  cursor: pointer;
+}
+
+summary {
+  padding: 0.4ex 0.7em;
+  margin-inline-start: -0.7em;
+  cursor: pointer;
+}

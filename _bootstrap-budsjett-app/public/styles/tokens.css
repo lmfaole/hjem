@@ -1,0 +1,14 @@
+:root {
+  color-scheme: light dark;
+
+  --font-family: system-ui, sans-serif;
+  --line-height: 1.5;
+
+  --border: color-mix(in srgb, CanvasText 12%, transparent);
+  --border-strong: color-mix(in srgb, CanvasText 20%, transparent);
+  --surface: color-mix(in srgb, CanvasText 5%, transparent);
+  --hover: color-mix(in srgb, CanvasText 7%, transparent);
+}
+
+:has(#theme-light:checked) { color-scheme: light; }
+:has(#theme-dark:checked)  { color-scheme: dark; }
