@@ -18,7 +18,7 @@
     {
       "binding": "BUDSJETT_DB",
       "database_name": "budsjett",
-      "database_id": "REPLACE_WITH_OUTPUT_FROM_WRANGLER_D1_CREATE",
+      "database_id": "25aed0d4-fd48-4014-8d7a-4d85294d6bcf",
       "migrations_dir": "migrations"
     }
   ]
