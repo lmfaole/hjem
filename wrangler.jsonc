@@ -11,6 +11,15 @@
   },
   "routes": [
     { "pattern": "lmfaole.party", "custom_domain": true },
-    { "pattern": "www.lmfaole.party", "custom_domain": true }
+    { "pattern": "www.lmfaole.party", "custom_domain": true },
+    { "pattern": "budsjett.lmfaole.party", "custom_domain": true }
+  ],
+  "d1_databases": [
+    {
+      "binding": "BUDSJETT_DB",
+      "database_name": "budsjett",
+      "database_id": "REPLACE_WITH_OUTPUT_FROM_WRANGLER_D1_CREATE",
+      "migrations_dir": "migrations"
+    }
   ]
 }
