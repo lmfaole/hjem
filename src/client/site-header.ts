@@ -4,7 +4,6 @@ class SiteHeader extends HTMLElement {
       <a href="/">lmfaole.party</a>
       <nav>
         <a href="/cv">CV</a>
-        <a href="https://budsjett.lmfaole.party">Budsjett</a>
       </nav>
     `;
   }

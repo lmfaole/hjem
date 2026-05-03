@@ -1,6 +1,5 @@
 import { generateOgImage } from './og-image.js';
 import { parseTotalFromLink } from './utils.js';
-import { handleBudsjett } from './budsjett.js';
 
 const GITHUB_COMMITS = 'https://api.github.com/repos/fremtind/jokul/commits?author=lmfaole';
 const CACHE_TTL = 600;
@@ -8,19 +7,14 @@ const GITHUB_HEADERS = {
   'User-Agent': 'lmfaole.party',
   'Accept': 'application/vnd.github+json',
 };
-const BUDSJETT_HOSTNAME = 'budsjett.lmfaole.party';
 
 interface Env {
   ASSETS: Fetcher;
-  BUDSJETT_DB: D1Database;
 }
 
 export default {
   async fetch(request: Request, env: Env, context: ExecutionContext): Promise<Response> {
     const url = new URL(request.url);
-    if (url.hostname === BUDSJETT_HOSTNAME) {
-      return handleBudsjett(request, url, env);
-    }
     if (url.pathname === '/api/commits') {
       return handleCommits(context);
     }

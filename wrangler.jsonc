@@ -11,15 +11,6 @@
   },
   "routes": [
     { "pattern": "lmfaole.party", "custom_domain": true },
-    { "pattern": "www.lmfaole.party", "custom_domain": true },
-    { "pattern": "budsjett.lmfaole.party", "custom_domain": true }
-  ],
-  "d1_databases": [
-    {
-      "binding": "BUDSJETT_DB",
-      "database_name": "budsjett",
-      "database_id": "25aed0d4-fd48-4014-8d7a-4d85294d6bcf",
-      "migrations_dir": "migrations"
-    }
+    { "pattern": "www.lmfaole.party", "custom_domain": true }
   ]
 }
