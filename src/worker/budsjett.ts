@@ -19,7 +19,68 @@ export async function handleBudsjett(
     return new Response('Method Not Allowed', { status: 405, headers: { 'Allow': 'GET, PUT' } });
   }
 
+  if (url.pathname === '/api/abonnementer') {
+    if (request.method === 'GET') return getAbonnementer(env);
+    return new Response('Method Not Allowed', { status: 405, headers: { 'Allow': 'GET' } });
+  }
+
+  if (url.pathname === '/api/eiendeler') {
+    if (request.method === 'GET') return getEiendeler(env);
+    return new Response('Method Not Allowed', { status: 405, headers: { 'Allow': 'GET' } });
+  }
+
   return serverStatiskAsset(request, url, env);
+}
+
+interface AbonnementRad {
+  id: number;
+  tjeneste: string;
+  leverandor: string | null;
+  type: string;
+  kostnad: number;
+  frekvens: string;
+  verdi: number;
+  status: string;
+  neste_betaling: string | null;
+  notat: string | null;
+  sortering: number;
+}
+
+interface EiendelRad {
+  id: number;
+  navn: string;
+  type: 'Eiendel' | 'Gjeld';
+  kategori: string;
+  selskap: string | null;
+  verdi: number;
+  rente: number | null;
+  notat: string | null;
+  oppdatert_dato: string | null;
+  sortering: number;
+}
+
+async function getAbonnementer(env: BudsjettEnv): Promise<Response> {
+  const result = await env.BUDSJETT_DB
+    .prepare(
+      `SELECT id, tjeneste, leverandor, type, kostnad, frekvens, verdi, status, neste_betaling, notat, sortering
+       FROM abonnement
+       ORDER BY status = 'Aktiv' DESC, sortering ASC`,
+    )
+    .all<AbonnementRad>();
+
+  return jsonResponse({ abonnementer: result.results });
+}
+
+async function getEiendeler(env: BudsjettEnv): Promise<Response> {
+  const result = await env.BUDSJETT_DB
+    .prepare(
+      `SELECT id, navn, type, kategori, selskap, verdi, rente, notat, oppdatert_dato, sortering
+       FROM eiendel
+       ORDER BY type DESC, sortering ASC`,
+    )
+    .all<EiendelRad>();
+
+  return jsonResponse({ eiendeler: result.results });
 }
 
 function jsonResponse(body: unknown, status = 200): Response {
