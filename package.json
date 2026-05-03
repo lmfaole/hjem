@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "tsc -p src/client/tsconfig.json",
-    "test": "node --experimental-strip-types --test src/worker/utils.test.ts src/worker/budsjett.test.ts src/client/format-date.test.ts src/client/budsjett/summary.test.ts",
+    "test": "node --experimental-strip-types --test src/worker/utils.test.ts src/worker/budsjett.test.ts src/client/format-date.test.ts src/client/budsjett/summary.test.ts src/client/budsjett/abonnement-utils.test.ts",
     "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p src/client/tsconfig.json --noEmit",
     "deploy": "npm run build && npx wrangler@latest deploy",
     "db:create": "npx wrangler@latest d1 create budsjett",

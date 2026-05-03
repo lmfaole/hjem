@@ -1,4 +1,5 @@
 import { computeBudgetSummary, type BudgetGruppe, type SummaryItem } from './summary.js';
+import { manedligKostnad, arligKostnad, dagerTilDato } from './abonnement-utils.js';
 
 interface BudgetItem extends SummaryItem {
   id: number;
@@ -18,6 +19,31 @@ interface BudgetUpdate {
   items?: Array<{ id: number; belop: number }>;
 }
 
+interface Abonnement {
+  id: number;
+  tjeneste: string;
+  leverandor: string | null;
+  type: string;
+  kostnad: number;
+  frekvens: string;
+  verdi: number;
+  status: string;
+  neste_betaling: string | null;
+  notat: string | null;
+}
+
+interface Eiendel {
+  id: number;
+  navn: string;
+  type: 'Eiendel' | 'Gjeld';
+  kategori: string;
+  selskap: string | null;
+  verdi: number;
+  rente: number | null;
+  notat: string | null;
+  oppdatert_dato: string | null;
+}
+
 const GRUPPE_TITTEL: Record<BudgetGruppe, string> = {
   faste: 'Faste utgifter',
   variable: 'Variable utgifter',
@@ -25,7 +51,9 @@ const GRUPPE_TITTEL: Record<BudgetGruppe, string> = {
 };
 
 const KRONE_FORMAT = new Intl.NumberFormat('no-NO', { style: 'currency', currency: 'NOK', maximumFractionDigits: 0 });
+const KRONE_PRESIS_FORMAT = new Intl.NumberFormat('no-NO', { style: 'currency', currency: 'NOK', maximumFractionDigits: 2 });
 const PROSENT_FORMAT = new Intl.NumberFormat('no-NO', { style: 'percent', maximumFractionDigits: 0 });
+const PROSENT_PRESIS_FORMAT = new Intl.NumberFormat('no-NO', { style: 'percent', maximumFractionDigits: 2 });
 const DATO_FORMAT = new Intl.DateTimeFormat('no-NO', { day: '2-digit', month: 'short', year: 'numeric' });
 
 const DEBOUNCE_MS = 600;
@@ -43,12 +71,25 @@ class BudsjettApp {
 
   async last(): Promise<void> {
     try {
-      const respons = await fetch('/api/budget');
-      if (!respons.ok) throw new Error(`HTTP ${respons.status}`);
-      this.budget = await respons.json() as Budget;
+      const [budgetRespons, abonnementRespons, eiendelRespons] = await Promise.all([
+        fetch('/api/budget'),
+        fetch('/api/abonnementer'),
+        fetch('/api/eiendeler'),
+      ]);
+
+      if (!budgetRespons.ok) throw new Error(`Budsjett: HTTP ${budgetRespons.status}`);
+      if (!abonnementRespons.ok) throw new Error(`Abonnementer: HTTP ${abonnementRespons.status}`);
+      if (!eiendelRespons.ok) throw new Error(`Eiendeler: HTTP ${eiendelRespons.status}`);
+
+      this.budget = await budgetRespons.json() as Budget;
+      const abonnementData = await abonnementRespons.json() as { abonnementer: Abonnement[] };
+      const eiendelData = await eiendelRespons.json() as { eiendeler: Eiendel[] };
+
       this.render();
+      this.renderAbonnementer(abonnementData.abonnementer);
+      this.renderEiendeler(eiendelData.eiendeler);
     } catch (feil) {
-      this.rotElement.innerHTML = `<p>Klarte ikke å hente budsjett: ${(feil as Error).message}</p>`;
+      this.rotElement.innerHTML = `<p>Klarte ikke å hente data: ${(feil as Error).message}</p>`;
     }
   }
 
@@ -78,6 +119,16 @@ class BudsjettApp {
       </section>
 
       ${tabeller}
+
+      <section aria-labelledby="abonnementer-overskrift" id="abonnementer-seksjon">
+        <h2 id="abonnementer-overskrift">Abonnementer</h2>
+        <p>laster …</p>
+      </section>
+
+      <section aria-labelledby="eiendeler-overskrift" id="eiendeler-seksjon">
+        <h2 id="eiendeler-overskrift">Eiendeler & gjeld</h2>
+        <p>laster …</p>
+      </section>
     `;
 
     this.rotElement.querySelector<HTMLInputElement>('#inntekt-input')!
@@ -218,6 +269,126 @@ class BudsjettApp {
     } catch (feil) {
       console.warn('Kunne ikke lagre budsjett:', feil);
     }
+  }
+
+  private renderAbonnementer(abonnementer: Abonnement[]): void {
+    const seksjon = this.rotElement.querySelector<HTMLElement>('#abonnementer-seksjon');
+    if (!seksjon) return;
+
+    const aktive = abonnementer.filter(abonnement => abonnement.status === 'Aktiv');
+    const inaktive = abonnementer.filter(abonnement => abonnement.status !== 'Aktiv');
+    const sumManedlig = aktive.reduce((sum, abonnement) => sum + manedligKostnad(abonnement.kostnad, abonnement.frekvens), 0);
+    const sumArlig    = aktive.reduce((sum, abonnement) => sum + arligKostnad(abonnement.kostnad, abonnement.frekvens), 0);
+
+    const radHtml = (abonnement: Abonnement): string => {
+      const dager = dagerTilDato(abonnement.neste_betaling);
+      const dagerCelle = dager === null ? '—' : dager < 0 ? `${dager} dager siden` : `om ${dager} dager`;
+      const stjerner = '⭐'.repeat(abonnement.verdi);
+      const kandidatFlagg = abonnement.verdi <= 2 && abonnement.status === 'Aktiv' ? ' <small>kandidat for oppsigelse</small>' : '';
+      return `
+        <tr>
+          <th scope="row">
+            ${escapeHtml(abonnement.tjeneste)}
+            ${abonnement.leverandor ? `<small>${escapeHtml(abonnement.leverandor)}</small>` : ''}
+            ${abonnement.notat ? `<small>${escapeHtml(abonnement.notat)}</small>` : ''}
+          </th>
+          <td>${escapeHtml(abonnement.type)}</td>
+          <td>${KRONE_FORMAT.format(manedligKostnad(abonnement.kostnad, abonnement.frekvens))}/mnd</td>
+          <td>${KRONE_FORMAT.format(arligKostnad(abonnement.kostnad, abonnement.frekvens))}/år</td>
+          <td>${escapeHtml(stjerner)}${kandidatFlagg}</td>
+          <td>${dagerCelle}</td>
+        </tr>
+      `;
+    };
+
+    const tabellHtml = (radene: Abonnement[]): string => {
+      if (radene.length === 0) return '';
+      return `
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Tjeneste</th>
+              <th scope="col">Type</th>
+              <th scope="col">Månedlig</th>
+              <th scope="col">Årlig</th>
+              <th scope="col">Verdi</th>
+              <th scope="col">Neste</th>
+            </tr>
+          </thead>
+          <tbody>${radene.map(radHtml).join('')}</tbody>
+        </table>
+      `;
+    };
+
+    seksjon.innerHTML = `
+      <h2 id="abonnementer-overskrift">Abonnementer</h2>
+      <p>Aktive abonnementer koster <strong>${KRONE_FORMAT.format(sumManedlig)}/mnd</strong> (${KRONE_FORMAT.format(sumArlig)}/år).</p>
+      ${tabellHtml(aktive)}
+      ${inaktive.length > 0 ? `<details><summary>Inaktive (${inaktive.length})</summary>${tabellHtml(inaktive)}</details>` : ''}
+    `;
+  }
+
+  private renderEiendeler(eiendeler: Eiendel[]): void {
+    const seksjon = this.rotElement.querySelector<HTMLElement>('#eiendeler-seksjon');
+    if (!seksjon) return;
+
+    const sumEiendeler = eiendeler.filter(rad => rad.type === 'Eiendel').reduce((sum, rad) => sum + rad.verdi, 0);
+    const sumGjeld    = eiendeler.filter(rad => rad.type === 'Gjeld').reduce((sum, rad) => sum + rad.verdi, 0);
+    const nettoFormue = sumEiendeler - sumGjeld;
+
+    const radHtml = (rad: Eiendel): string => {
+      const fortegn = rad.type === 'Gjeld' ? '−' : '';
+      return `
+        <tr>
+          <th scope="row">
+            ${escapeHtml(rad.navn)}
+            ${rad.selskap ? `<small>${escapeHtml(rad.selskap)}</small>` : ''}
+            ${rad.notat ? `<small>${escapeHtml(rad.notat)}</small>` : ''}
+          </th>
+          <td>${escapeHtml(rad.kategori)}</td>
+          <td>${rad.rente !== null && rad.rente > 0 ? PROSENT_PRESIS_FORMAT.format(rad.rente) : '—'}</td>
+          <td>${fortegn}${KRONE_PRESIS_FORMAT.format(rad.verdi)}</td>
+        </tr>
+      `;
+    };
+
+    const eiendelRader = eiendeler.filter(rad => rad.type === 'Eiendel');
+    const gjeldRader = eiendeler.filter(rad => rad.type === 'Gjeld');
+
+    const tabell = (overskrift: string, radene: Eiendel[], totalLabel: string, total: number, totalFortegn: string): string => {
+      if (radene.length === 0) return '';
+      return `
+        <h3>${escapeHtml(overskrift)}</h3>
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Navn</th>
+              <th scope="col">Kategori</th>
+              <th scope="col">Rente</th>
+              <th scope="col">Verdi</th>
+            </tr>
+          </thead>
+          <tbody>${radene.map(radHtml).join('')}</tbody>
+          <tfoot>
+            <tr>
+              <th scope="row" colspan="3">${escapeHtml(totalLabel)}</th>
+              <td>${totalFortegn}${KRONE_PRESIS_FORMAT.format(total)}</td>
+            </tr>
+          </tfoot>
+        </table>
+      `;
+    };
+
+    seksjon.innerHTML = `
+      <h2 id="eiendeler-overskrift">Eiendeler & gjeld</h2>
+      <p>
+        Netto formue:
+        <strong>${nettoFormue < 0 ? '−' : ''}${KRONE_PRESIS_FORMAT.format(Math.abs(nettoFormue))}</strong>
+        (eiendeler ${KRONE_PRESIS_FORMAT.format(sumEiendeler)} − gjeld ${KRONE_PRESIS_FORMAT.format(sumGjeld)})
+      </p>
+      ${tabell('Eiendeler', eiendelRader, 'Sum eiendeler', sumEiendeler, '')}
+      ${tabell('Gjeld', gjeldRader, 'Sum gjeld', sumGjeld, '−')}
+    `;
   }
 }
 
